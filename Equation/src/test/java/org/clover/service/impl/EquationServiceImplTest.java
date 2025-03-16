@@ -2,7 +2,6 @@ package org.clover.service.impl;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
 public class EquationServiceImplTest {
     private final EquationServiceImpl equationService = new EquationServiceImpl();
 

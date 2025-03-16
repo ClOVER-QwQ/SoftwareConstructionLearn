@@ -25,7 +25,7 @@ public class EquationServiceImpl implements EquationService {
             equation.setLeft(random.nextInt(1, 100)); // 左操作数
             equation.setRight(random.nextInt(1, 100)); // 右操作数
             equation.setResult(calculateAdditionEquation(equation)); // 计算结果
-        } while (equation.getResult() > 100);
+        } while (equation.getResult() >= 100);
 
         // 拼接方程字符串
         equation.setEquation(asString(equation));
@@ -43,10 +43,10 @@ public class EquationServiceImpl implements EquationService {
         equation.setNotation('-'); // 设置运算符为减号
         do {
             // 随机生成两个操作数
-            equation.setLeft(random.nextInt(50, 100)); // 左操作数
-            equation.setRight(random.nextInt(1, 50)); // 右操作数
+            equation.setLeft(random.nextInt(1, 100)); // 左操作数
+            equation.setRight(random.nextInt(1, 100)); // 右操作数
             equation.setResult(calculateSubtractionEquation(equation)); // 计算结果
-        } while (equation.getResult() < 0);
+        } while (equation.getResult() <= 0);
 
         // 拼接方程字符串
         equation.setEquation(asString(equation));
@@ -74,7 +74,7 @@ public class EquationServiceImpl implements EquationService {
     @Override
     public Result<List<Equation>> generateExerciseOfAdditionEquations() {
         Result<List<Equation>> result = new Result<>();
-        Set<Equation> equationSet = new HashSet<>(); // 使用HashSet去重
+        Set<Equation> equationSet = new HashSet<>();
 
         int maxAttempts = 100; // 最大尝试次数
         int attempts = 0;
@@ -158,12 +158,7 @@ public class EquationServiceImpl implements EquationService {
         return result;
     }
 
-    /**
-     * 判断一个算式是否已经存在于列表中
-     * @param newEquation 新生成的算式
-     * @param equations 已有的算式列表
-     * @return 如果存在返回true，否则返回false
-     */
+
     private boolean occursIn(Equation newEquation, Set<Equation> equations) {
         for (Equation existingEquation : equations) {
             if (isEqual(newEquation, existingEquation)) {
@@ -173,12 +168,6 @@ public class EquationServiceImpl implements EquationService {
         return false;
     }
 
-    /**
-     * 判断两个算式是否相等
-     * @param equation1 第一个算式
-     * @param equation2 第二个算式
-     * @return 如果相等返回true，否则返回false
-     */
     private boolean isEqual(Equation equation1, Equation equation2) {
         // 如果是加法，考虑交换律
         if (equation1.getNotation() == '+' && equation2.getNotation() == '+') {
@@ -189,20 +178,10 @@ public class EquationServiceImpl implements EquationService {
         return equation1.getLeft() == equation2.getLeft() && equation1.getRight() == equation2.getRight();
     }
 
-    /**
-     * 将算式转换为字符串
-     * @param equation 算式
-     * @return 算式字符串
-     */
     public String asString(Equation equation) {
         return equation.getLeft() + " " + equation.getNotation() + " " + equation.getRight() + " = " + equation.getResult();
     }
 
-    /**
-     * 格式化并显示练习题
-     * @param title 标题
-     * @param equations 练习题列表
-     */
     public void formatAndDisplayExercise(String title, List<Equation> equations) {
         System.out.println(title);
         System.out.println("----------------------------------------");
