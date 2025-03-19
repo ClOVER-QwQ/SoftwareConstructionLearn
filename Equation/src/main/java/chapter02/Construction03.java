@@ -23,13 +23,13 @@ public class Construction03 {
 		
 		int[] equation=new int[3]; 
 		equation[2]=1;
-		int value=0;                 //Ôö¼ÓÊä³ö½á¹û
+		int value=0;                 //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 		do {
 			equation[0]=generateOperand();
 			equation[1]=generateOperand();
 	        value=equation[0]+equation[1];
-		}while(value>=100);         //Ôö¼ÓÅÐ¶Ï£¬¿ÉÒÔµ¥¶À·â×°Îª¼ì²âº¯Êý£¬Èç½Ì²ÄP34ÖÐµÄvoid check()
+		}while(value>=100);         //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï£ï¿½ï¿½ï¿½ï¿½Ôµï¿½ï¿½ï¿½ï¿½ï¿½×°Îªï¿½ï¿½âº¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì²ï¿½P34ï¿½Ðµï¿½void check()
 			
 		return equation;
 	}
@@ -39,12 +39,12 @@ public class Construction03 {
 			
 			int[] equation=new int[3]; 
 			equation[2]=0;
-			int value=0;                 //Ôö¼ÓÊä³ö½á¹û
+			int value=0;                 //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			do {
 				equation[0]=generateOperand();
 				equation[1]=generateOperand();
 		        value=equation[0]-equation[1];
-			}while(value<=0);         //Ôö¼ÓÅÐ¶Ï£¬¿ÉÒÔµ¥¶À·â×°Îª¼ì²âº¯Êý£¬Èç½Ì²ÄP34ÖÐµÄvoid check()
+			}while(value<=0);         //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï£ï¿½ï¿½ï¿½ï¿½Ôµï¿½ï¿½ï¿½ï¿½ï¿½×°Îªï¿½ï¿½âº¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì²ï¿½P34ï¿½Ðµï¿½void check()
 				
 			return equation;
 		}
@@ -58,7 +58,7 @@ public class Construction03 {
 		for(int i=0;i<50;i++) {
 //			do {
 //				equation=generateAddEquation();
-//			}while(?);  //Çë²¹È«´úÂë
+//			}while(?);  //ï¿½ë²¹È«ï¿½ï¿½ï¿½ï¿½
 			
 			exercise[i]=generateAddEquation();
 			System.out.println(exercise[i][0]+"+"+exercise[i][1]+"=");

@@ -23,23 +23,23 @@ public class Construction02 {
 		String equation=""; 
 		int left_operand=0;
 		int right_operand=0;
-		int value=0;                 //Ôö¼ÓÊä³ö½á¹û
+		int value=0;                 //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		System.out.println();
-		System.out.println("¼Ó·¨Á·Ï°Ìâ£º");
+		System.out.println("ï¿½Ó·ï¿½ï¿½ï¿½Ï°ï¿½â£º");
 		System.out.println();
-		System.out.print("ÌâÄ¿"+1+"~"+10+":"+"\t");
+		System.out.print("ï¿½ï¿½Ä¿"+1+"~"+10+":"+"\t");
 		for(int i=0;i<50;i++) {
 			do {
 				left_operand=generateOperand();
 		        right_operand=generateOperand();
 		        value=left_operand+right_operand;
-			}while(value>=100);         //Ôö¼ÓÅÐ¶Ï£¬¿ÉÒÔµ¥¶À·â×°Îª¼ì²âº¯Êý£¬Èç½Ì²ÄP34ÖÐµÄvoid check()
+			}while(value>=100);         //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï£ï¿½ï¿½ï¿½ï¿½Ôµï¿½ï¿½ï¿½ï¿½ï¿½×°Îªï¿½ï¿½âº¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì²ï¿½P34ï¿½Ðµï¿½void check()
 			equation=left_operand+"+"+right_operand+"="+value;
-			System.out.printf("%-10s",equation);    //ÐÞ¸ÄÊä³ö¸ñÊ½£¬Ã¿ÐÐ10¸ö£¬ÆäÖÐ£º"%-10s"ÊµÏÖÊä³ö×ó¶ÔÆë
-			if((i+1)%10 == 0){         //Ã¿Ñ­»·10´Îµ÷ÓÃÒ»´Î,»»ÐÐÊä³ö
+			System.out.printf("%-10s",equation);    //ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½Ã¿ï¿½ï¿½10ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½"%-10s"Êµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			if((i+1)%10 == 0){         //Ã¿Ñ­ï¿½ï¿½10ï¿½Îµï¿½ï¿½ï¿½Ò»ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				System.out.println();
 				if(i<49) {
-				System.out.print("ÌâÄ¿"+(i+2)+"~"+(i+11)+":"+"\t");
+				System.out.print("ï¿½ï¿½Ä¿"+(i+2)+"~"+(i+11)+":"+"\t");
 				}
             }
 		}
@@ -50,23 +50,23 @@ public class Construction02 {
 			String equation=""; 
 			int left_operand=0;
 			int right_operand=0;
-			int value=0;                 //Ôö¼ÓÊä³ö½á¹û
+			int value=0;                 //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			System.out.println();
-			System.out.println("¼õ·¨Á·Ï°Ìâ£º");
+			System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½â£º");
 			System.out.println();
-			System.out.print("ÌâÄ¿"+1+"~"+10+":"+"\t");
+			System.out.print("ï¿½ï¿½Ä¿"+1+"~"+10+":"+"\t");
 			for(int i=0;i<50;i++) {
 				do {
 					left_operand=generateOperand();
 			        right_operand=generateOperand();
 			        value=left_operand-right_operand;
-				}while(value<=0);          //Ôö¼ÓÅÐ¶Ï£¬¿ÉÒÔµ¥¶À·â×°Îª¼ì²âº¯Êý£¬Èç½Ì²ÄP34ÖÐµÄvoid check()
+				}while(value<=0);          //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï£ï¿½ï¿½ï¿½ï¿½Ôµï¿½ï¿½ï¿½ï¿½ï¿½×°Îªï¿½ï¿½âº¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì²ï¿½P34ï¿½Ðµï¿½void check()
 				equation=left_operand+"-"+right_operand+"="+value;
-				System.out.printf("%-10s",equation);    //ÐÞ¸ÄÊä³ö¸ñÊ½£¬Ã¿ÐÐ10¸ö£¬ÆäÖÐ£º"%-10s"ÊµÏÖÊä³ö×ó¶ÔÆë
-				if((i+1)%10 == 0){         //Ã¿Ñ­»·10´Îµ÷ÓÃÒ»´Î,»»ÐÐÊä³ö
+				System.out.printf("%-10s",equation);    //ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½Ã¿ï¿½ï¿½10ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½"%-10s"Êµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				if((i+1)%10 == 0){         //Ã¿Ñ­ï¿½ï¿½10ï¿½Îµï¿½ï¿½ï¿½Ò»ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 					System.out.println();
 					if(i<49) {
-					System.out.print("ÌâÄ¿"+(i+2)+"~"+(i+11)+":"+"\t");
+					System.out.print("ï¿½ï¿½Ä¿"+(i+2)+"~"+(i+11)+":"+"\t");
 					}
 	            }
 			}
