@@ -7,9 +7,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="EquationCsv" />
         <module name="Equation" />
         <module name="EquationPlus" />
+        <module name="EquationCsv" />
+        <module name="EquationCorrect" />
       </profile>
     </annotationProcessing>
   </component>
