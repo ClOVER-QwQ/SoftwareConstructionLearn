@@ -16,9 +16,9 @@ public class ExerciseCSV {
     // 写入CSV文件
     public void writeExerciseToFile(List<Equation> equations, String fileName) {
         File targetFile = validateFileName(fileName);
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
-            for (Equation eq : equations) {
-                writer.write(eq.getQuestion() + ","); // 写入无答案算式
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(targetFile))) {
+            for (Equation equation : equations) {
+                writer.write(equation.getEquation());
                 writer.newLine();
             }
         } catch (IOException e) {
@@ -43,10 +43,14 @@ public class ExerciseCSV {
         try (BufferedReader reader = new BufferedReader(new FileReader(sourceFile))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                for (String part : parts) {
-                    processEquation(part, cleanNoise, equations);
-                }
+                line = line.trim(); // 去掉首尾空格
+                if (line.isEmpty()) continue; // 跳过空行
+
+                String[] parts = line.split(",", -1);
+                if (parts.length < 1) continue; // 跳过无效行
+
+                String equationStr = parts[0].trim();
+                processEquation(equationStr, cleanNoise, equations);
             }
         } catch (IOException e) {
             handleIOException("读取文件失败", e);
@@ -74,12 +78,12 @@ public class ExerciseCSV {
     }
 
     private boolean isValidEquation(String equation) {
-        return equation.matches("^\\d+\\s*[+\\-]\\s*\\d+\\s*=\\s*\\d+$");
+        return equation.matches("^\\d+\\s*[+\\-]\\s*\\d+\\s*(=\\s*\\d*)?$");
     }
 
     private Optional<Equation> parseEquation(String equationStr) {
         try {
-            String pattern = "^\\s*(\\d+)\\s*([+\\-])\\s*(\\d+)\\s*=\\s*(\\d+)\\s*$";
+            String pattern = "^\\s*(\\d+)\\s*([+\\-])\\s*(\\d+)\\s*(=\\s*(\\d*))?$";
             Pattern r = Pattern.compile(pattern);
             Matcher m = r.matcher(equationStr.trim());
             if (!m.find()) {
@@ -89,14 +93,19 @@ public class ExerciseCSV {
             int left = Integer.parseInt(m.group(1));
             char operator = m.group(2).charAt(0);
             int right = Integer.parseInt(m.group(3));
-            int result = Integer.parseInt(m.group(4));
+            int result = -1;
+
+            String resultStr = m.group(5);
+            if (resultStr != null && !resultStr.isEmpty()) {
+                result = Integer.parseInt(resultStr);
+            }
 
             Equation equation = new Equation();
             equation.setLeft(left);
             equation.setRight(right);
             equation.setNotation(operator);
             equation.setResult(result);
-            equation.buildEquation();
+            equation.setEquation(equationStr);
 
             return Optional.of(equation);
         } catch (NumberFormatException e) {
@@ -104,6 +113,7 @@ public class ExerciseCSV {
             return Optional.empty();
         }
     }
+
     private void handleIOException(String message, IOException e) {
         System.err.println(message + ": " + e.getMessage());
         if (e instanceof FileNotFoundException) {

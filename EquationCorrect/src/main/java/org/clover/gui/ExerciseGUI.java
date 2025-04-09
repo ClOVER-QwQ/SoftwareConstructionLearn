@@ -126,10 +126,11 @@ public class ExerciseGUI extends JFrame {
 
             // 创建带标签的面板
             JPanel rowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
-            rowPanel.add(new JLabel((i+1) + ". "));  // 添加题号
+            rowPanel.add(new JLabel((i + 1) + ". "));  // 添加题号
             rowPanel.add(tEquation[i]);
             rowPanel.add(new JLabel("答案："));
             rowPanel.add(tAnswer[i]);
+            rowPanel.add(new JLabel(""));  // 添加一个空标签，用于显示批改结果
 
             panelCenter.add(rowPanel);
             rowPanel.setVisible(false);
@@ -227,10 +228,45 @@ public class ExerciseGUI extends JFrame {
             File file = fileChooser.getSelectedFile();
             ExerciseCSV csv = new ExerciseCSV();
             List<Equation> equations = csv.readNoisyExerciseFromFile(file.getAbsolutePath());
-            CheckAnswer checker = new CheckAnswer();
-            checker.checkExercise(equations, answer);
-            checker.printExerciseCheck(); // Print to console or update GUI
-            labelResult.setText("正确: " + checker.getRightCount() + " 错误: " + checker.getWrongCount());
+            ExerciseAnswer userAnswers = new ExerciseAnswer();
+
+            // 读取用户输入的答案
+                int i = 0;
+                while (i < equations.size()) {
+                    userAnswers.add(equations.get(i).getResult());
+                    i++;
+                }
+
+            // 自动生成正确答案列表
+            ExerciseAnswer correctAnswers = new ExerciseAnswer();
+            for (Equation eq : equations) {
+                int result = eq.getNotation() == '+' ? eq.getLeft() + eq.getRight() : eq.getLeft() - eq.getRight();
+                correctAnswers.add(result);
+            }
+
+            int correct = 0, wrong = 0, empty = 0;
+            for (i = 0; i < equations.size(); i++) {
+                Integer userAns = userAnswers.get(i);
+                Integer correctAns = correctAnswers.get(i);
+                if (userAns == -1) {
+                    empty++;
+                } else if (userAns.equals(correctAns)) {
+                    correct++;
+                } else {
+                    wrong++;
+                }
+            }
+
+            // 显示批改结果
+            JOptionPane.showMessageDialog(this, "批改结果：\n正确: " + correct + "\n错误: " + wrong + "\n空置: " + empty, "批改结果", JOptionPane.INFORMATION_MESSAGE);
+
+            // 更新界面显示
+            labelResult.setText("正确: " + correct + " 错误: " + wrong + " 空置: " + empty);
+            labelResult.setVisible(true);
+
+            // 显示饼图和结果表格
+            showPieChart(correct, wrong, empty);
+            showResultTable(equations, userAnswers, correctAnswers);
         }
     }
 
@@ -249,8 +285,8 @@ public class ExerciseGUI extends JFrame {
             Equation eq = exercise.getEquations().get(i);
 
             // 获取当前行的组件
-            JTextField equationField = (JTextField) ((JPanel)rowPanel).getComponent(1);
-            JTextField answerField = (JTextField) ((JPanel)rowPanel).getComponent(3);
+            JTextField equationField = (JTextField) ((JPanel) rowPanel).getComponent(1);
+            JTextField answerField = (JTextField) ((JPanel) rowPanel).getComponent(3);
 
             equationField.setText(eq.getQuestion());
             answerField.setText(answer.get(i) != -1 ? String.valueOf(answer.get(i)) : "");
@@ -288,22 +324,29 @@ public class ExerciseGUI extends JFrame {
     }
 
     private void check() {
-        int correct = 0, wrong = 0;
+        int correct = 0, wrong = 0, empty = 0;
         for (int i = 0; i < exercise.getEquations().size(); i++) {
             Equation eq = exercise.getEquations().get(i);
             JTextField answerField = tAnswer[i % PAGE_SIZE]; // 获取当前页的答案框
             String userAnswerStr = answerField.getText().trim();
 
             if (userAnswerStr.isEmpty()) {
-                continue; // 跳过未填写的答案
+                empty++;
+                // 更新界面显示空置
+                ((JPanel) panelCenter.getComponent(i % PAGE_SIZE)).add(new JLabel("空置"));
+                continue;
             }
 
             try {
                 int userAnswer = Integer.parseInt(userAnswerStr);
                 if (userAnswer == eq.getResult()) {
                     correct++;
+                    // 更新界面显示正确
+                    ((JPanel) panelCenter.getComponent(i % PAGE_SIZE)).add(new JLabel("✓"));
                 } else {
                     wrong++;
+                    // 更新界面显示错误
+                    ((JPanel) panelCenter.getComponent(i % PAGE_SIZE)).add(new JLabel("✗"));
                 }
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "请输入有效的数字答案！", "错误", JOptionPane.ERROR_MESSAGE);
@@ -312,17 +355,18 @@ public class ExerciseGUI extends JFrame {
         }
 
         // 显示批改结果
-        JOptionPane.showMessageDialog(this, "批改结果：\n正确: " + correct + "\n错误: " + wrong, "批改结果", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "批改结果：\n正确: " + correct + "\n错误: " + wrong + "\n空置: " + empty, "批改结果", JOptionPane.INFORMATION_MESSAGE);
 
         // 更新界面显示
-        labelResult.setText("正确: " + correct + " 错误: " + wrong);
+        labelResult.setText("正确: " + correct + " 错误: " + wrong + " 空置: " + empty);
         labelResult.setVisible(true);
     }
 
-    private void showPieChart(int correct, int wrong) {
+    private void showPieChart(int correct, int wrong, int empty) {
         DefaultPieDataset dataset = new DefaultPieDataset();
         dataset.setValue("正确", correct);
         dataset.setValue("错误", wrong);
+        dataset.setValue("空置", empty);
 
         JFreeChart chart = ChartFactory.createPieChart(
                 "批改结果", dataset, true, true, false);
@@ -337,16 +381,27 @@ public class ExerciseGUI extends JFrame {
         frame.setVisible(true);
     }
 
-    private void showResultTable(List<Equation> equations, List<Integer> userAnswers) {
+    private void showResultTable(List<Equation> equations, ExerciseAnswer userAnswers, ExerciseAnswer correctAnswers) {
         String[] columns = {"算式", "用户答案", "正确答案", "结果"};
         Object[][] data = new Object[equations.size()][4];
         for (int i = 0; i < equations.size(); i++) {
             Equation eq = equations.get(i);
-            Integer ans = userAnswers.get(i);
+            Integer userAns = userAnswers.get(i);
+            Integer correctAns = correctAnswers.get(i);
             data[i][0] = eq.getEquation();
-            data[i][1] = (ans != null) ? ans : "无答案";
-            data[i][2] = eq.getResult();
-            data[i][3] = (ans != null && ans == eq.getResult()) ? "正确" : "错误";
+            data[i][2] = correctAns;
+
+            if (userAns == -1) {
+                data[i][1] = "空置";
+                data[i][3] = "空置";
+            } else {
+                data[i][1] = userAns;
+                if (userAns.equals(correctAns)) {
+                    data[i][3] = "正确";
+                } else {
+                    data[i][3] = "错误";
+                }
+            }
         }
 
         JTable table = new JTable(data, columns);
@@ -357,5 +412,4 @@ public class ExerciseGUI extends JFrame {
         frame.pack();
         frame.setVisible(true);
     }
-
 }
